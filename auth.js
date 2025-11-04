@@ -26,9 +26,7 @@ app.get('/', async (req, res) => {
   if(!response.ok) return res.status(response.status).send('Error fetching access token.');
 
   const data = await response.json();
-  console.log('Access token received!');
-  console.log(data);
-  res.status(200).send('Access token received!');
+  res.status(200).json(data);
 
 });
 
