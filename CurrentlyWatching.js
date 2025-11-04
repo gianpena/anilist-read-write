@@ -2,7 +2,6 @@ const query = `
 query CurrentlyWatching($pg: Int) {
   Page(page: $pg, perPage: 20) {
     mediaList(userName: "gian", type: ANIME, status: CURRENT) {
-      id,
       status,
       media {
         id,
