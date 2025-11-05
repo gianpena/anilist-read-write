@@ -2,8 +2,8 @@ import { config } from 'dotenv';
 config();
 
 const query = `
-mutation WatchEpisode($animeId: Int, $episode: Int) {
-  SaveMediaListEntry(mediaId: $animeId, progress: $episode) {
+mutation UpdateProgress($mediaId: Int, $prgrss: Int) {
+  SaveMediaListEntry(mediaId: $mediaId, progress: $prgrss) {
     media {
       title {
         english(stylised: true)
@@ -15,7 +15,7 @@ mutation WatchEpisode($animeId: Int, $episode: Int) {
 }
 `;
 
-export async function watchEpisode(animeId, episode) {
+export async function updateProgress(mediaId, prgrss) {
   const response = await fetch('https://graphql.anilist.co', {
     method: 'POST',
     headers: {
@@ -26,13 +26,13 @@ export async function watchEpisode(animeId, episode) {
     body: JSON.stringify({
       query,
       variables: {
-        animeId,
-        episode
+        mediaId,
+        prgrss
       }
     })
   });
   if (!response.ok) {
-    return { success: false, status: response.status, message: 'Error updating episode progress.' };
+    return { success: false, status: response.status, message: 'Error updating progress.' };
   }
 
   const data = await response.json();
