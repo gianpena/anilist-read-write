@@ -17,6 +17,29 @@ let title = '';
   let timer = null;
   const DELAY_MS = 3000;
 
+  function injectButton() {
+    const btn = document.createElement('button');
+    btn.id = 'anilist-dummy-btn';
+    btn.textContent = 'Mark as watched on Anilist';
+    btn.style.marginLeft = '10px';
+    btn.onclick = function() {
+      console.log('Dummy script executed!');
+    };
+    const info = document.querySelector('div.info');
+    if (info) {
+      const title = info.querySelector('h1.title.d-title');
+      if (title && title.nextSibling) {
+        info.insertBefore(btn, title.nextSibling);
+      } else if (title) {
+        info.appendChild(btn);
+      } else {
+        info.appendChild(btn);
+      }
+    } else {
+      document.body.appendChild(btn);
+    }
+  }
+
   function scheduleCheck() {
     clearTimeout(timer);
     timer = setTimeout(readEpisode, DELAY_MS);
@@ -49,7 +72,8 @@ let title = '';
   window.addEventListener('popstate', () => window.dispatchEvent(new Event('urlchange')));
   window.addEventListener('urlchange', scheduleCheck);
 
-  // 3) React to the active class changing
+  injectButton();
+
   const mo = new MutationObserver((muts) => {
     for (const m of muts) {
       if (m.type === 'attributes' && m.attributeName === 'class') { scheduleCheck(); break; }
