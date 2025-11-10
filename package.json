@@ -2,8 +2,7 @@
   "name": "anilist-stuff",
   "version": "1.0.0",
   "scripts": {
-    "auth": "node auth.js",
-    "mutate": "node mutate.js"
+    "auth": "node auth.js"
   },
   "author": "",
   "license": "ISC",
