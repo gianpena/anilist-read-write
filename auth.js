@@ -7,7 +7,7 @@ import https from 'https';
 import fs from 'fs';
 
 const allowedOrigins = [
-  'www.aniwave.se'
+  'https://www.aniwave.se'
 ];
 
 config();
