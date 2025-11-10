@@ -3,6 +3,8 @@ import { config } from 'dotenv';
 import cors from 'cors';
 import { updateProgress } from './UpdateProgress.js';
 import { lookForAnime } from './LookForAnime.js';
+import https from 'https';
+import fs from 'fs';
 
 const allowedOrigins = [
   'aniwave.se'
@@ -15,8 +17,13 @@ app.use(cors({
   origin: allowedOrigins
 }));
 
-
 let access_token = process.env.ACCESS_TOKEN || '';
+
+// Load SSL certificate and key
+const sslOptions = {
+  key: fs.readFileSync('./ssl/private-key.pem'),
+  cert: fs.readFileSync('./ssl/certificate.pem')
+};
 
 app.get('/', async (req, res) => {
   const { code } = req.query;
@@ -33,7 +40,7 @@ app.get('/', async (req, res) => {
         grant_type: 'authorization_code',
         client_id: process.env.CLIENT_ID,
         client_secret: process.env.CLIENT_SECRET,
-        redirect_uri: 'http://localhost:3000/',
+        redirect_uri: 'https://localhost/', // Update to https
         code
       })
     });
@@ -65,13 +72,14 @@ app.post('/update', async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server is running on http://localhost:3000');
+// Start HTTPS server on port 443
+https.createServer(sslOptions, app).listen(443, () => {
+  console.log('HTTPS server is running on https://localhost');
   if(access_token) {
     const shownToken = access_token.length > 20 ? access_token.slice(0, 20) + '...' : access_token;
     console.log('Access token currently set to: ', shownToken);
   } else {
     console.log('Please navigate to the following URL to authorize:');
-    console.log(`https://anilist.co/api/v2/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=http://localhost:3000/&response_type=code`);
+    console.log(`https://anilist.co/api/v2/oauth/authorize?client_id=${process.env.CLIENT_ID}&redirect_uri=https://localhost/&response_type=code`);
   }
 });
