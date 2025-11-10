@@ -1,6 +1,3 @@
-import { config } from 'dotenv';
-config();
-
 const query = `
 mutation UpdateProgress($mediaId: Int, $prgrss: Int) {
   SaveMediaListEntry(mediaId: $mediaId, progress: $prgrss) {
@@ -15,13 +12,13 @@ mutation UpdateProgress($mediaId: Int, $prgrss: Int) {
 }
 `;
 
-export async function updateProgress(mediaId, prgrss) {
+export async function updateProgress(mediaId, prgrss, token) {
   const response = await fetch('https://graphql.anilist.co', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
-      'Authorization': `Bearer ${process.env.ACCESS_TOKEN}`
+      'Authorization': `Bearer ${token}`
     },
     body: JSON.stringify({
       query,
@@ -36,5 +33,5 @@ export async function updateProgress(mediaId, prgrss) {
   }
 
   const data = await response.json();
-  return { success: true, data: data.data.SaveMediaListEntry };
+  return { success: true, status: response.status, data: data.data.SaveMediaListEntry };
 }
