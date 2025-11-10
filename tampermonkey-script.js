@@ -23,6 +23,11 @@ let title = '';
     btn.textContent = 'Mark as watched on Anilist';
     btn.style.marginLeft = '10px';
     btn.onclick = function() {
+      const originalText = btn.textContent;
+      btn.textContent = 'Marked as watched!';
+      setTimeout(() => {
+        btn.textContent = originalText;
+      }, 1500);
       console.log('Dummy script executed!');
     };
     const info = document.querySelector('div.info');
