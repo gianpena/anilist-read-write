@@ -10,6 +10,7 @@
 
 let episode = -1;
 let title = '';
+let API_URL = '__API_URL__';
 
 (function () {
   'use strict';
@@ -22,13 +23,24 @@ let title = '';
     btn.id = 'anilist-dummy-btn';
     btn.textContent = 'Mark as watched on Anilist';
     btn.style.marginLeft = '10px';
-    btn.onclick = function() {
+    btn.onclick = async function() {
       const originalText = btn.textContent;
       btn.textContent = 'Marked as watched!';
       setTimeout(() => {
         btn.textContent = originalText;
       }, 1500);
-      console.log('Dummy script executed!');
+
+      let response = await fetch(`${API_URL}/update`, {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify({
+              animeName: title,
+              progress: episode
+          })
+      });
+      response = await response.json();
+      console.log(response);
+
     };
     const info = document.querySelector('div.info');
     if (info) {
